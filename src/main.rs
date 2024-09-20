@@ -1,21 +1,27 @@
 pub mod app;
-use std::fs;
-use std::env;
-use std::os::windows::fs::MetadataExt;
-use chrono::{DateTime, Local};
-use crossterm::style::Stylize;
-use app::{App, Entry};
+pub mod ref_command;
+pub mod parser;
+use std::{env, fmt::format};
+use app::App;
+use ref_command::*;
 
 
 fn main() -> std::io::Result<()> {
-    let args: Vec<String> = env::args().collect();
-    let file: &String = if args.len() == 1 { &".".to_string() } else {&args[1]};
-    let app: App= App::init(file);
-    for entry in app.entries   {
-        println!(
-            "{:<6} \t {:<19} {:>8} {}",
-            entry.mode, entry.last_modified, entry.lenght, entry.name
-        );
+    let app: App = App::init();
+
+
+    for dir in &app.dirs {
+        println!("{}", dir);
+        for entry in &app.entries    {
+            if dir == &entry.father  {
+                println!(
+                    "{:<6} \t {:<19} {:>8} {}",
+                    entry.mode, entry.last_modified, entry.lenght, entry.name
+                );
+            }
+
+        }
+        println!("")
     }
 
     Ok(())
