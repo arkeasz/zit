@@ -1,12 +1,18 @@
 use std::fs;
-use std::env;
 use std::os::windows::fs::MetadataExt;
 use chrono::{DateTime, Local};
 use crossterm::style::Stylize;
+use crate::parser::{self, parse};
+
+const NAME: &str = "ld";
+const VERSION: &str = "0.1";
 
 #[derive(Debug)]
 pub struct App {
-    pub entries: Vec<Entry>
+    pub entries: Vec<Entry>,
+    pub dirs: Vec<String>,
+    pub name: &'static str,
+    pub version: &'static str
 }
 
 #[derive(Debug)]
@@ -14,7 +20,8 @@ pub struct Entry    {
     pub mode: String,
     pub last_modified: String,
     pub name: String,
-    pub lenght: u64
+    pub lenght: u64,
+    pub father: String
 }
 impl Entry  {
     pub fn new() -> Entry {
@@ -22,18 +29,25 @@ impl Entry  {
             mode: String::new(),
             last_modified: String::new(),
             name: String::new(),
-            lenght: 0
+            lenght: 0,
+            father: String::new()
         }
     }
 }
 impl App    {
-    pub fn init(file: &String) -> App    {
-        let mut entries : Vec<Entry> = Vec::new();
-        if let Ok(entriez) = fs::read_dir::<&String>(file)  {
-            for entry in entriez    {
+    pub fn init() -> App    {
+        let (options, values) = parse();
+        let mut entries: Vec<Entry> = Vec::new();
+        let mut dirs: Vec<String> = Vec::new();
+
+        for val in values   {
+           if let Ok(dir) = fs::read_dir::<&String>(&val)   {
+            dirs.push(val.clone());
+            for entry in dir    {
                 let mut entry_dir = Entry::new();
                 if let Ok(entry) = entry    {
-                    // entry_dir.name = format!("{}", entry.file_name());
+                    entry_dir.father = val.clone();
+
                     if let Ok(metadata) = fs::metadata(entry.path())    {
                         entry_dir.lenght = metadata.file_size();
                         let permissions = metadata.permissions();
@@ -62,9 +76,17 @@ impl App    {
                 }
                 entries.push(entry_dir)
             }
-        } else {
-            println!("the file couldnt be found")
+           } else {
+               continue;
+           }
         }
-        App { entries }
+
+        App {
+            entries,
+            dirs,
+            name: &NAME,
+            version: &VERSION
+        }
+
     }
 }
