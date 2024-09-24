@@ -1,6 +1,8 @@
 use std::env;
 use crate::ref_command::*;
-pub enum Options    {
+#[derive(Clone, Copy, PartialEq)]
+
+pub enum Option    {
     All,
     List,
     Help,
@@ -33,8 +35,13 @@ pub fn parse() -> (Vec<String>, Vec<String>)  {
             }
         }
         else  {
-            values.push(arg)
+            values.push(arg);
         }
     }
+
+    if values.len() == 1    {
+        values.push(".".to_string());
+    }
+
     (options, values)
 }
