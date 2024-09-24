@@ -1,6 +1,6 @@
 
 pub const NAME: &str = "ld";
-pub const VERSION: &str = " v0.1";
+pub const VERSION: &str = "v0.0.1";
 pub const HELP: &str = r#"Usage:
     fac <option> <directory>
 
@@ -14,3 +14,12 @@ pub const HELP: &str = r#"Usage:
         [--all, -a]
             include hidden files
 "#;
+
+pub fn help()   {
+    println!("{}", &HELP)
+}
+
+pub fn version()    {
+    println!("{} ({})", &NAME, &VERSION);
+    println!("author: Arki (github: @Arkeasz)");
+}
