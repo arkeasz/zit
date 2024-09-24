@@ -1,4 +1,4 @@
-# ld - A `ls` Alternative for Windows
+# ld - A `ls` Alternative for Windows (DEV)
 
 ## Overview
 `ld` is a simple and fast alternative to the traditional Unix `ls` command, designed specifically for Windows. It lists directory contents with a focus on speed and simplicity, aiming to improve the user experience in Windows environments.
