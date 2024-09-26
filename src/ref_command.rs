@@ -1,5 +1,5 @@
 
-pub const NAME: &str = "ld";
+pub const NAME: &str = "zit";
 pub const VERSION: &str = "v0.0.1";
 pub const HELP: &str = r#"Usage:
     fac <option> <directory>
