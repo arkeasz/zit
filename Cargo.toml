@@ -1,5 +1,5 @@
 [package]
-name = "ld"
+name = "zit"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,4 +8,3 @@ edition = "2021"
 [dependencies]
 chrono = "0.4.38"
 crossterm = "0.28.1"
-
