@@ -2,7 +2,7 @@ use std::env;
 use crate::ref_command::*;
 #[derive(Clone, Copy, PartialEq)]
 
-pub enum Option    {
+pub enum Opti   {
     All,
     List,
     Help,
