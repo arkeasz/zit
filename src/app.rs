@@ -3,7 +3,7 @@ use std::ops::Index;
 use std::os::windows::fs::MetadataExt;
 use chrono::{DateTime, Local};
 use crossterm::style::Stylize;
-use crate::parser::{parse, Option};
+use crate::parser::{parse, Opti};
 use crate::ref_command::*;
 
 #[derive(Clone)]
@@ -12,7 +12,7 @@ pub struct App {
     pub dirs: Vec<String>,
     pub name: &'static str,
     pub version: &'static str,
-    pub options: Vec<Option>
+    pub options: Vec<Opti>
 
 }
 #[derive(Clone)]
@@ -35,7 +35,7 @@ impl Entry  {
     }
 }
 impl App    {
-    pub fn init() -> App    {
+    pub fn init() -> Option<App>    {
         let mut app = App {
             entries: Vec::new(),
             dirs: Vec::new(),
@@ -48,10 +48,10 @@ impl App    {
         let mut dirs: Vec<String> = Vec::new();
         for op in options   {
             match op.as_str()    {
-                "--help" | "-h" => { help(); break},
-                "--version" | "-v" => { version(); break},
-                "--all" | "-a" => app.options.push(Option::All),
-                "--list" | "-l" => app.options.push(Option::List),
+                "--help" | "-h" => { help(); return None},
+                "--version" | "-v" => { version(); return None},
+                "--all" | "-a" => app.options.push(Opti::All),
+                "--list" | "-l" => app.options.push(Opti::List),
                 _ => todo!()
             }
         }
@@ -66,7 +66,7 @@ impl App    {
                     if let Ok(entry) = entry    {
                         entry_dir.father = val.clone();
                         if let Some(filename) = entry.file_name().to_str()  {
-                            if filename.starts_with('.') && app.options.contains(&Option::All) {
+                            if filename.starts_with('.') && !app.options.contains(&Opti::All) {
                                 continue;
                             }
                             if let Ok(metadata) = fs::metadata(entry.path())    {
@@ -88,16 +88,6 @@ impl App    {
                             }
                             entry_dir.name = filename.to_string();
                         }
-
-
-                        // match entry.file_name().to_str() {
-                        //     Some(s) => {
-                        //         entry_dir.name = s.to_string();
-                        //     }
-                        //     None => {
-                        //         eprintln!("Failed to convert OsString to String due to invalid UTF-8");
-                        //     }
-                        // }
                     }
                     entries.push(entry_dir)
                 }
@@ -108,7 +98,7 @@ impl App    {
 
         app.entries = entries;
         app.dirs = dirs;
-        app
+        Some(app)
 
     }
 }
