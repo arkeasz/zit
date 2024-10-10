@@ -8,21 +8,35 @@ use ref_command::*;
 
 fn main() {
     if let Some(app) = App::init() {
-        for dir in &app.dirs {
-            for entry in &app.entries    {
-                if dir == &entry.father  {
-                    if app.options.contains(&Opti::List)  {
-                        println!(
-                            "{:<6} \t {:<19} {:>8} {}",
-                            entry.mode, entry.last_modified, entry.lenght, entry.name
-                        );
-                    } else {
-                        print!("{} \t", entry.name)
-                    }
+        if app.dirs.is_empty()  {
+            for entry in app.entries    {
+                if app.options.contains(&Opti::List)  {
+                    println!(
+                        "{:<6} \t {:<19} {:>8} {}",
+                        entry.mode, entry.last_modified, entry.lenght, entry.name
+                    );
+                } else {
+                    print!("{} \t", entry.name)
                 }
-
             }
-            println!("")
+            print!("a")
+        } else {
+            for dir in &app.dirs {
+                for entry in &app.entries    {
+                    if dir == &entry.father  {
+                        if app.options.contains(&Opti::List)  {
+                            println!(
+                                "{:<6} \t {:<19} {:>8} {}",
+                                entry.mode, entry.last_modified, entry.lenght, entry.name
+                            );
+                        } else {
+                            print!("{} \t", entry.name)
+                        }
+                    }
+
+                }
+                println!("")
+            }
         }
     } else {
         return;
