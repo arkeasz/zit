@@ -1,5 +1,4 @@
 use std::fs;
-use std::ops::Index;
 use std::os::windows::fs::MetadataExt;
 use chrono::{DateTime, Local};
 use crate::parser::{parse, Opti};
@@ -61,7 +60,6 @@ impl App    {
             if val.contains('*')    {
 
                 if let Ok(paths) = glob(&val){
-                    println!("{:#?}",paths);
                     for path in paths   {
                         if let Ok(path) = path  {
                             if let Ok(meta) = fs::metadata(&path)   {
